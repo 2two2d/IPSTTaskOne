@@ -1,8 +1,10 @@
+import type {TUser} from './types/TUser'
+
 //Данна строка 'DDADSADASDAAADS' вывести все уникальные символы в строке "DAS"
 
 function selectUniqLetters(str: string): string {
 
-    let uniqLetters = ''
+    let uniqLetters: string = ''
 
     str.split('').map((item)=>{
         if(uniqLetters.indexOf(item) === -1){
@@ -18,7 +20,7 @@ function selectUniqLetters(str: string): string {
 
 function rewordTheLine(str: string): string {
 
-    return str.split(' ').map((item)=>{
+    return str.split(' ').map((item: string)=>{
         return item[0].repeat(item.length)
     }).join(' ')
 }
@@ -35,33 +37,46 @@ function makePalindrome(str: string): string {
 //вывести из объекта адресс в формате 'Город: city2 Улица: street2 Дом: house2'.
 //из этого же объекта вывести 'фамилия personLastName имя personFirstName купил 5 штук товаров name'
 
-function displayUserProperties(user: {city: string, street: string, house: string,
-                                      lastName: string, firstName: string, goodsBought: number}){
+async function displayUserProperties(): Promise<void>{
 
-    console.log(`Город: ${user.city} Улица: ${user.street} Дом: ${user.house}`)
-    console.log(`фамилия ${user.lastName} имя ${user.firstName} купил ${user.goodsBought} штук товаров name`)
+    const getClientAddress = (user: TUser): string => {
+        return `Город: ${user.address.city}\n` +
+                `Улица: ${user.address.street}\n` +
+                `Дом: ${user.address.house}`
+    }
+
+    const getClientStats = (user: TUser): string => {
+        return `${user.person.lastName} ${user.person.firstName}` +
+                ` купил ${user.productsOrder.count} штук товаров ${user.productsOrder.product.name}`
+    }
+
+    const user: TUser = await fetch('https://raw.githubusercontent.com/jakiichu/data/main/data.json').
+    then((response) => response.json())
+
+    console.log(getClientAddress(user))
+    console.log(getClientStats(user))
+
+
 }
-
-// displayUserProperties({city: 'city2', street: 'street2', house: 'house2',
-//                             lastName: 'personLastName', firstName: 'personFirstName', goodsBought: 5})
+displayUserProperties()
 
 //вывести все числа делящиеся только на себя до 100
 
-function simpleNumbersUpToHundred(){
+function simpleNumbersUpToHundred(): void{
 
-    const HIGHEST_NUMBER = 100
+    const HIGHEST_NUMBER: number = 100
 
     function isSimpleNumber(num: number): boolean {
         if (num === 1 || num === 4) return false
 
-        for (let i = 2; i <= num/2; i++){
+        for (let i: number = 2; i <= num/2; i++){
             if(!(num % i)) return false
         }
 
         return true
     }
 
-    for(let i = 1; i < HIGHEST_NUMBER; i++){
+    for(let i: number = 1; i < HIGHEST_NUMBER; i++){
         if(isSimpleNumber(i)) console.log(i)
     }
 }
@@ -69,9 +84,9 @@ function simpleNumbersUpToHundred(){
 
 //вывести числа фибаначи до 200
 
-function fibonachiNumbers(){
+function fibonachiNumbers(): void{
 
-    const HIGHEST_NUMBER = 200
+    const HIGHEST_NUMBER: number = 200
 
     function fibonachiAtPosition(number: number): number {
         return number <= 1 ?
@@ -79,7 +94,7 @@ function fibonachiNumbers(){
                fibonachiAtPosition(number - 1) + fibonachiAtPosition(number - 2)
     }
 
-    let i = 0
+    let i: number = 0
 
     while (true) {
 
@@ -99,21 +114,21 @@ function fibonachiNumbers(){
 // года попадает этот месяц (зима, лето, весна, осень). В переменной year лежит какой то год например 2022.
 // Определите високосный это год или нет.
 
-function displayMonthAndYear(){
+function displayMonthAndYear(): void{
 
-    let month = Math.round(Math.random() * 12)
-    let year = Math.round(Math.random() * 2024)
+    let month: number = Math.round(Math.random() * 12)
+    let year: number = Math.round(Math.random() * 2024)
 
     const SEASONS: {'зима': number[],
                     'весна': number[],
                     'лето': number[],
                     'осень': number[]} = {'зима': [1,2,12], 'весна': [3,4,5], 'лето': [6,7,8], 'осень': [9,10,11]}
 
-    let currentSeason = Object.keys(SEASONS).filter((season)=>{
+    let currentSeason: string[] = Object.keys(SEASONS).filter((season: string): boolean=>{
         return SEASONS[season].indexOf(month) != -1
     })
 
-    let isYearLeap = (! (year % 4) && (year % 100))
+    let isYearLeap: boolean = Boolean(! (year % 4) && (year % 100))
 
     console.log(`Месяц: ${month}, сезон: ${currentSeason}`)
     console.log(`Год: ${year}, високосный: ${isYearLeap ? 'Да' : 'Нет'}`)
@@ -128,10 +143,10 @@ function binarySearch(arr: number[], value: number): number{
 
     console.log(arr)
 
-    let isFound = false
-    let position = -1
+    let isFound: boolean = false
+    let position: number = -1
     let middle: number
-    let primeArrLength = arr.length
+    let primeArrLength: number = arr.length
 
     let arrMiddle = (arr: number[]): number => Math.floor(arr.length/2)
 
@@ -159,10 +174,10 @@ function binarySearch(arr: number[], value: number): number{
 
 function displayConcatenatedArray(){
 
-    let arrOfNumbers = [1,2,3,6,8,1,6,3,2,1,0,4]
-    let arrOfStrings = ['one', 'two','three']
+    let arrOfNumbers: number[] = [1,2,3,6,8,1,6,3,2,1,0,4]
+    let arrOfStrings: string[] = ['one', 'two','three']
 
-    arrOfNumbers = arrOfNumbers.sort((a , b)=>{
+    arrOfNumbers = arrOfNumbers.sort((a: number , b: number): number=>{
         if (a < b) return -1
         if (a > b) return 1
         return 0
@@ -177,10 +192,10 @@ function displayConcatenatedArray(){
 //вывести все элементы из двумерного массива [[1,4,5],[1,3,4],[2,6]] добавить все элементы в одномерный массив
 // [1,4,5,1,3,4,2,6] и отсоритровать его
 
-function displayMatrix(){
+function displayMatrix(): void{
 
-    let matrix = [[1,4,5],[1,3,4],[2,6]]
-    let array = [1,4,5,1,3,4,2,6]
+    let matrix: number[][] = [[1,4,5],[1,3,4],[2,6]]
+    let array: number[] = [1,4,5,1,3,4,2,6]
 
     for(let subArr of matrix){
         for(let i of subArr){
@@ -200,7 +215,7 @@ function displayMatrix(){
 
 function objectToArray(prop: object): any[][]{
 
-    return Object.keys(prop).map((key)=>{
+    return Object.keys(prop).map((key: string): [string, any] =>{
         return [key, prop[key]]
     })
 }
@@ -216,7 +231,7 @@ class Worker{
     surname: string
     rate: number
     days: number
-    constructor(name, surname, rate, days) {
+    constructor(name: string, surname: string, rate: number, days: number) {
         this.name = name
         this.surname = surname
         this.rate = rate
@@ -230,7 +245,7 @@ class Worker{
 }
 
 let worker = new Worker('Jo', 'Silver', 1300, 12)
-console.log(worker.getSalary())
+// console.log(worker.getSalary())
 
 //Модифицируйте класс Worker из предыдущей задачи следующим образом: сделайте все его свойства приватными,
 // а для их чтения сделайте методы-геттеры.
@@ -288,7 +303,7 @@ class MyString{
     }
 
     ucWords = (str: string): string => {
-        return str.split(' ').map((item)=>{
+        return str.split(' ').map((item: string)=>{
             return item.slice(0,1).toUpperCase() + item.slice(1)
         }).join(' ')
     }
@@ -311,11 +326,11 @@ class calculation{
         this._calculationLine = str
     }
 
-    setterCalculationLine = (str: string) => {
+    setterCalculationLine = (str: string): void => {
         this._calculationLine = str
     }
 
-    setLastSymbolCalculationLine = (char: string) => {
+    setLastSymbolCalculationLine = (char: string): void => {
         if (char.length !== 1) return
         this._calculationLine += char
     }
